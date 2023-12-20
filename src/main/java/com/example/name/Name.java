@@ -4,10 +4,7 @@ package com.example.name;
 public class Name {
 
     private Integer id;
-<<<<<<< HEAD
-=======
 
->>>>>>> 1c97a1300676b342a4fce1b06f0d3e4ac5025703
     private String name;
 
     private int age;

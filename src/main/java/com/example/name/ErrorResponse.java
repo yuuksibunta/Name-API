@@ -35,7 +35,4 @@ public class ErrorResponse {
         return path;
     }
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> 1c97a1300676b342a4fce1b06f0d3e4ac5025703
