@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface NameMapper {
 
     @Select("SELECT * FROM names")
-    List<Name> findAll();
+    List<Name> findAllNames();
 
     @Select("SELECT * FROM names WHERE name LIKE CONCAT(#{name}, '%')")
     List<Name> findByNameStartingWith(String prefix);
@@ -24,4 +24,8 @@ public interface NameMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Name name);
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1c97a1300676b342a4fce1b06f0d3e4ac5025703
