@@ -47,17 +47,6 @@ public class NameController {
         @PostMapping("/names")
         public ResponseEntity<?> insert(@RequestBody NameRequest nameRequest) {
 
-            if (nameRequest.getName() == null || nameRequest.getName().isEmpty()) {
-
-                Map<String, String> errorResponse = Map.of(
-                        "timestamp", ZonedDateTime.now().toString(),
-                        "status", String.valueOf(HttpStatus.BAD_REQUEST.value()),
-                        "error", HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                        "message", "Name field cannot be null or empty",
-                        "path", "/names"
-                );
-                return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-            }
             Name name = nameService.insert(nameRequest.getName(), nameRequest.getAge());
             return new ResponseEntity<>(name, HttpStatus.CREATED);
         }

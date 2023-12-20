@@ -3,7 +3,6 @@ package com.example.name;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
-
 @Service
 public class NameService {
 
@@ -18,15 +17,13 @@ public class NameService {
         if (name.isPresent()) {
             return name.get();
         } else {
-            throw new NameNotFoundException("存在しません");
+            throw new NameNotFoundException("指定されたIDの名前は存在しません");
         }
     }
-
 
     public Name insert(String name, Integer age) {
         Name newName = new Name(null, name, age);
         nameMapper.insert(newName);
         return newName;
     }
-
 }
