@@ -3,7 +3,7 @@ package com.example.name;
 import jakarta.validation.constraints.NotBlank;
 
 public class NameRequest {
-    @NotBlank(message = "存在しません")
+    @NotBlank(message = "必須フィールドです")
     private String name;
 
     private int age;
