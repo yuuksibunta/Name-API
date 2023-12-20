@@ -1,24 +1,17 @@
 package com.example.name;
 
 
-public class Name {
+import jakarta.validation.constraints.NotBlank;
 
-    private Integer id;
+public class NameRequest {
+    @NotBlank(message = "Name cannot be blank")
     private String name;
+
     private int age;
 
-    public Name(Integer id, String name, int age) {
-        this.id = id;
+    public NameRequest(String name, int age) {
         this.name = name;
         this.age = age;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -36,4 +29,9 @@ public class Name {
     public void setAge(int age) {
         this.age = age;
     }
+    public boolean isValid() {
+
+        return name != null && !name.trim().isEmpty();
+    }
+
 }
