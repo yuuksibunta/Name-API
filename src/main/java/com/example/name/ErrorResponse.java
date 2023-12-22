@@ -35,4 +35,3 @@ public class ErrorResponse {
         return path;
     }
 }
-

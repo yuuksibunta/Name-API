@@ -12,13 +12,9 @@ public class NameService {
         this.nameMapper = nameMapper;
     }
 
-    public Name findByld(int id) {
-        Optional<Name> name = this.nameMapper.findById(id);
-        if (name.isPresent()) {
-            return name.get();
-        } else {
-            throw new NameNotFoundException("指定されたIDの名前は存在しません");
-        }
+    public Name findById(int id) {
+        Optional<Name> optionalName = this.nameMapper.findById(id);
+        return optionalName.orElseThrow(() -> new NameNotFoundException("指定されたIDの名前は存在しません"));
     }
 
     public Name insert(String name, Integer age) {
@@ -26,4 +22,17 @@ public class NameService {
         nameMapper.insert(newName);
         return newName;
     }
+
+    public Name update(int id, String newName, int newAge) {
+
+        Name existingName = findById(id);
+
+        existingName.setName(newName);
+        existingName.setAge(newAge);
+
+        nameMapper.update(id, newName, newAge);
+
+        return existingName;
+    }
+
 }

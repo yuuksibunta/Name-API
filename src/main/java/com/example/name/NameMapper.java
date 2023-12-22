@@ -1,9 +1,7 @@
 package com.example.name;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +21,8 @@ public interface NameMapper {
     @Insert("INSERT INTO names (name, age) VALUES (#{name}, #{age})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(Name name);
+
+    @Update("UPDATE names SET name = #{name}, age = #{age} WHERE id = #{id}")
+    void update(@Param("id") int id, @Param("name") String name, @Param("age") int age);
 
 }

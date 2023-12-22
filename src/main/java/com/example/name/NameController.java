@@ -26,41 +26,60 @@ public class NameController {
         this.nameMapper = nameMapper;
     }
 
-        @GetMapping("/names/{id}")
-        public Name getName(@PathVariable("id") int id) {
-            return nameService.findByld(id);
-        }
+    @GetMapping("/names/{id}")
+    public ResponseEntity<?> getName(@PathVariable("id") int id) {
+        try {
 
-        @GetMapping("/names/all")
-        public List<Name> getAllNames() {
-            return nameMapper.findAll();
-        }
-        @GetMapping("/names")
-        public List<Name> findByNames(@RequestParam(required = false) String startsWith) {
-            if (startsWith != null && !startsWith.isEmpty()) {
-                return nameMapper.findByNameStartingWith(startsWith);
-            } else {
-                return nameMapper.findAll();
-            }
-        }
+            Name name = nameService.findById(id);
+            return new ResponseEntity<>(name, HttpStatus.OK);
+        } catch (NameNotFoundException e) {
 
-        @PostMapping("/names")
-        public ResponseEntity<?> insert(@RequestBody NameRequest nameRequest) {
-
-            Name name = nameService.insert(nameRequest.getName(), nameRequest.getAge());
-            return new ResponseEntity<>(name, HttpStatus.CREATED);
-        }
-
-        @ExceptionHandler(value = NameNotFoundException.class)
-        public ResponseEntity<Map<String, String>> handleNameNotFoundException(
-                NameNotFoundException e, HttpServletRequest request) {
             Map<String, String> body = Map.of(
                     "timestamp", ZonedDateTime.now().toString(),
                     "status", String.valueOf(HttpStatus.NOT_FOUND.value()),
                     "error", HttpStatus.NOT_FOUND.getReasonPhrase(),
-                    "message", e.getMessage(),
-                    "path", request.getRequestURI());
+                    "message", e.getMessage());
             return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
         }
+    }
+    @GetMapping("/names/all")
+    public List<Name> getAllNames() {
+        return nameMapper.findAll();
+    }
+    @GetMapping("/names")
+    public List<Name> findByNames(@RequestParam(required = false) String startsWith) {
+        if (startsWith != null && !startsWith.isEmpty()) {
+            return nameMapper.findByNameStartingWith(startsWith);
+        } else {
+            return nameMapper.findAll();
+        }
+    }
 
+    @PostMapping("/names")
+    public ResponseEntity<?> insert(@RequestBody NameRequest nameRequest) {
+
+        Name name = nameService.insert(nameRequest.getName(), nameRequest.getAge());
+        return new ResponseEntity<>(name, HttpStatus.CREATED);
+    }
+
+    @ExceptionHandler(value = NameNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNameNotFoundException(
+            NameNotFoundException e, HttpServletRequest request) {
+        Map<String, String> body = Map.of(
+                "timestamp", ZonedDateTime.now().toString(),
+                "status", String.valueOf(HttpStatus.NOT_FOUND.value()),
+                "error", HttpStatus.NOT_FOUND.getReasonPhrase(),
+                "message", e.getMessage(),
+                "path", request.getRequestURI());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @PatchMapping("/names/{id}")
+    public ResponseEntity<?> updateName(
+            @PathVariable("id") int id,
+            @RequestBody NameRequest nameRequest) {
+
+        Name updatedName = nameService.update(id, nameRequest.getName(), nameRequest.getAge());
+        return new ResponseEntity<>(updatedName, HttpStatus.OK);
+    }
 }
