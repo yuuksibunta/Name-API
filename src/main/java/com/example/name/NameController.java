@@ -1,6 +1,5 @@
 package com.example.name;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,18 +61,6 @@ public class NameController {
         return new ResponseEntity<>(name, HttpStatus.CREATED);
     }
 
-    @ExceptionHandler(value = NameNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleNameNotFoundException(
-            NameNotFoundException e, HttpServletRequest request) {
-        Map<String, String> body = Map.of(
-                "timestamp", ZonedDateTime.now().toString(),
-                "status", String.valueOf(HttpStatus.NOT_FOUND.value()),
-                "error", HttpStatus.NOT_FOUND.getReasonPhrase(),
-                "message", e.getMessage(),
-                "path", request.getRequestURI());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
     @PatchMapping("/names/{id}")
     public ResponseEntity<Name> updateName(
             @PathVariable("id") int id,
@@ -81,7 +68,8 @@ public class NameController {
 
         Name existingName = nameService.findById(id);
 
-        Name updatedName = nameService.update(existingName, nameRequest.getName(), nameRequest.getAge());
+        Name updatedName = nameService.update(id, nameRequest.getName(), nameRequest.getAge());
+
         return new ResponseEntity<>(updatedName, HttpStatus.OK);
     }
 }
