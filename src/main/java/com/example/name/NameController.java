@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
-
 
 @RestController
 @Validated
@@ -42,10 +40,12 @@ public class NameController {
             return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/names/all")
     public List<Name> getAllNames() {
         return nameMapper.findAll();
     }
+
     @GetMapping("/names")
     public List<Name> findByNames(@RequestParam(required = false) String startsWith) {
         if (startsWith != null && !startsWith.isEmpty()) {
@@ -56,7 +56,7 @@ public class NameController {
     }
 
     @PostMapping("/names")
-    public ResponseEntity<?> insert(@RequestBody NameRequest nameRequest) {
+    public ResponseEntity<Name> insert(@RequestBody NameRequest nameRequest) {
 
         Name name = nameService.insert(nameRequest.getName(), nameRequest.getAge());
         return new ResponseEntity<>(name, HttpStatus.CREATED);
@@ -75,11 +75,13 @@ public class NameController {
     }
 
     @PatchMapping("/names/{id}")
-    public ResponseEntity<?> updateName(
+    public ResponseEntity<Name> updateName(
             @PathVariable("id") int id,
             @RequestBody NameRequest nameRequest) {
 
-        Name updatedName = nameService.update(id, nameRequest.getName(), nameRequest.getAge());
+        Name existingName = nameService.findById(id);
+
+        Name updatedName = nameService.update(existingName, nameRequest.getName(), nameRequest.getAge());
         return new ResponseEntity<>(updatedName, HttpStatus.OK);
     }
 }
