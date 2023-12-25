@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 import java.util.Optional;
 
-
 @Mapper
 public interface NameMapper {
 
@@ -24,5 +23,4 @@ public interface NameMapper {
 
     @Update("UPDATE names SET name = #{name}, age = #{age} WHERE id = #{id}")
     void update(@Param("id") int id, @Param("name") String name, @Param("age") int age);
-
 }
