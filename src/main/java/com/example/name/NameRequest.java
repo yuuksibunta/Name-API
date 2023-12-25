@@ -32,5 +32,4 @@ public class NameRequest {
 
         return name != null && !name.trim().isEmpty();
     }
-
 }
