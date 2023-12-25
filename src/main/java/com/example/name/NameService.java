@@ -1,7 +1,6 @@
 package com.example.name;
 
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class NameService {
@@ -12,9 +11,9 @@ public class NameService {
         this.nameMapper = nameMapper;
     }
 
-    public Name findById(int id) {
-        Optional<Name> optionalName = this.nameMapper.findById(id);
-        return optionalName.orElseThrow(() -> new NameNotFoundException("指定されたIDの名前は存在しません"));
+    public Name findById(int id) throws NameNotFoundException {
+        return nameMapper.findById(id)
+                .orElseThrow(() -> new NameNotFoundException("指定されたIDの名前は存在しません"));
     }
 
     public Name insert(String name, Integer age) {
@@ -23,12 +22,14 @@ public class NameService {
         return newName;
     }
 
-    public Name update(Name existingName, String newName, int newAge) {
+    public Name update(int id, String newName, int newAge) throws NameNotFoundException {
+
+        Name existingName = findById(id);
 
         existingName.setName(newName);
         existingName.setAge(newAge);
 
-        nameMapper.update(existingName.getId(), newName, newAge);
+        nameMapper.update(id, newName, newAge);
 
         return existingName;
     }
