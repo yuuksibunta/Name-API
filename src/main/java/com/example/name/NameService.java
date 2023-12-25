@@ -23,16 +23,13 @@ public class NameService {
         return newName;
     }
 
-    public Name update(int id, String newName, int newAge) {
-
-        Name existingName = findById(id);
+    public Name update(Name existingName, String newName, int newAge) {
 
         existingName.setName(newName);
         existingName.setAge(newAge);
 
-        nameMapper.update(id, newName, newAge);
+        nameMapper.update(existingName.getId(), newName, newAge);
 
         return existingName;
     }
-
 }
