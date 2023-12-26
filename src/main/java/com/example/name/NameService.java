@@ -13,9 +13,10 @@ public class NameService {
         this.nameMapper = nameMapper;
     }
 
-    public Name findById(int id) throws NameNotFoundException {
-        return nameMapper.findById(id)
-                .orElseThrow(() -> new NameNotFoundException("指定されたIDの名前は存在しません"));
+    public Name findById(int id) {
+        Optional<Name> optionalName = nameMapper.findById(id);
+
+        return optionalName.orElseThrow(() -> new ResourceNotFoundException("指定されたIDの名前は存在しません"));
     }
 
     public Name insert(String name, Integer age) {
@@ -32,11 +33,11 @@ public class NameService {
             existingName.setName(newName);
             existingName.setAge(newAge);
 
-            nameMapper.update(id, newName, newAge);
+            nameMapper.update(existingName.getId(), newName, newAge);
 
             return existingName;
         } else {
-            throw new NameNotFoundException("指定されたIDの名前は存在しません");
+            throw new ResourceNotFoundException("指定されたIDの名前は存在しません");
         }
     }
 }
