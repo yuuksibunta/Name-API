@@ -22,7 +22,7 @@ public class NameController {
     }
 
     @GetMapping("/names/{id}")
-    public ResponseEntity<?> getName(@PathVariable("id") int id) throws NameNotFoundException {
+    public ResponseEntity<Name> getName(@PathVariable("id") int id) throws NameNotFoundException {
         Name name = nameService.findById(id);
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
