@@ -54,4 +54,10 @@ public class NameController {
         Name updatedName = nameService.update(id, nameRequest.getName(), nameRequest.getAge());
         return new ResponseEntity<>(updatedName, HttpStatus.OK);
     }
+
+    @DeleteMapping("/names/{id}")
+    public ResponseEntity<String> deleteName(@PathVariable int id) {
+        nameService.delete(id);
+        return new ResponseEntity<>("user deleted", HttpStatus.OK);
+    }
 }
