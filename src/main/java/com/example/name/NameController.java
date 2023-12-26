@@ -22,7 +22,7 @@ public class NameController {
     }
 
     @GetMapping("/names/{id}")
-    public ResponseEntity<Name> getName(@PathVariable("id") int id) throws NameNotFoundException {
+    public ResponseEntity<Name> getName(@PathVariable("id") int id) throws ResourceNotFoundException {
         Name name = nameService.findById(id);
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
@@ -51,7 +51,6 @@ public class NameController {
     public ResponseEntity<Name> updateName(
             @PathVariable("id") int id,
             @RequestBody NameRequest nameRequest) {
-        Name existingName = nameService.findById(id);
         Name updatedName = nameService.update(id, nameRequest.getName(), nameRequest.getAge());
         return new ResponseEntity<>(updatedName, HttpStatus.OK);
     }
