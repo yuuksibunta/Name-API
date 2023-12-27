@@ -1,6 +1,8 @@
 package com.example.name;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +60,12 @@ public class NameController {
     @DeleteMapping("/names/{id}")
     public ResponseEntity<String> deleteName(@PathVariable int id) {
         nameService.delete(id);
-        return new ResponseEntity<>("user deleted", HttpStatus.OK);
+
+        String responseBody = "{\"message\": \"name deleted\"}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 }
