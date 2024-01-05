@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,12 +66,11 @@ public class NameController {
     }
 
     @DeleteMapping("/names/{id}")
-    public ResponseEntity<Map<String, String>> deleteName(@PathVariable int id) {
+    public ResponseEntity<NameResponse> deleteName(@PathVariable int id) {
         nameService.delete(id);
 
         String message = "name deleted";
-        Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("message", message);
+        NameResponse responseBody = new NameResponse(message);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
