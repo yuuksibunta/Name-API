@@ -1,17 +1,13 @@
 package com.example.name;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class NameResponse {
-    private final Map<String, String> response;
+    private final String message;
 
     public NameResponse(String message) {
-        this.response = new HashMap<>();
-        this.response.put("message", message);
+        this.message = message;
     }
 
-    public Map<String, String> getResponse() {
-        return response;
+    public String getMessage() {
+        return message;
     }
 }
