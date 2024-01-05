@@ -1,5 +1,6 @@
 package com.example.name;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +31,6 @@ public class NameController {
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
 
-    @GetMapping("/names/all")
-    public List<Name> getAllNames() {
-        return nameMapper.findAll();
-    }
-
     @GetMapping("/names")
     public List<Name> findByNames(@RequestParam(required = false) String startsWith) {
         if (startsWith != null && !startsWith.isEmpty()) {
@@ -41,6 +38,18 @@ public class NameController {
         } else {
             return nameMapper.findAll();
         }
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleResourceNotFoundException(
+            ResourceNotFoundException e, HttpServletRequest request) {
+        Map<String, String> body = Map.of(
+                "timestamp", ZonedDateTime.now().toString(),
+                "status", String.valueOf(HttpStatus.NOT_FOUND.value()),
+                "error", HttpStatus.NOT_FOUND.getReasonPhrase(),
+                "message", e.getMessage(),
+                "path", request.getRequestURI());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/names")
@@ -58,10 +67,12 @@ public class NameController {
     }
 
     @DeleteMapping("/names/{id}")
-    public ResponseEntity<String> deleteName(@PathVariable int id) {
+    public ResponseEntity<Map<String, String>> deleteName(@PathVariable int id) {
         nameService.delete(id);
 
-        String responseBody = "{\"message\": \"name deleted\"}";
+        String message = "name deleted";
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("message", message);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
